@@ -12,7 +12,6 @@ let access_token = "";
 
 const visibilityDuration = urlParams.get("duration") || 0;
 const hideAlbumArt = urlParams.has("hideAlbumArt");
-const appearSide = urlParams.get("side") || "bottom"; // New parameter for appearance side
 
 let currentState = false;
 let currentSongUri = "";
@@ -212,7 +211,6 @@ function ConvertSecondsToMinutesSoThatItLooksBetterOnTheOverlay(time) {
 	return `${minutes}:${('0' + seconds).slice(-2)}`;
 }
 
-// Modified to handle different appearance sides
 function SetVisibility(isVisible, updateCurrentState = true) {
 	widgetVisibility = isVisible;
 
@@ -220,34 +218,11 @@ function SetVisibility(isVisible, updateCurrentState = true) {
 
 	if (isVisible) {
 		mainContainer.style.opacity = 1;
-		
-		// Reset all positions first
-		mainContainer.style.left = appearSide === "right" ? "calc(100% - 20px)" : appearSide === "left" ? "20px" : "50%";
-		
-		if (appearSide === "top" || appearSide === "bottom") {
-			// Handle top/bottom appearance
-			mainContainer.style.transform = `translate(-50%, ${appearSide === "top" ? "0" : "0"})`;
-			mainContainer.style.top = appearSide === "top" ? "50px" : "auto";
-			mainContainer.style.bottom = appearSide === "bottom" ? "50px" : "auto";
-		} else {
-			// Handle left/right appearance
-			mainContainer.style.transform = `translate(${appearSide === "left" ? "0" : "0"}, -50%)`;
-			mainContainer.style.top = "50%";
-			mainContainer.style.bottom = "auto";
-		}
-	} else {
+		mainContainer.style.bottom = "50%";
+	}
+	else {
 		mainContainer.style.opacity = 0;
-		
-		// Hide animation based on side
-		if (appearSide === "top") {
-			mainContainer.style.top = "30px";
-		} else if (appearSide === "bottom") {
-			mainContainer.style.bottom = "30px";
-		} else if (appearSide === "left") {
-			mainContainer.style.left = "0px";
-		} else if (appearSide === "right") {
-			mainContainer.style.left = "calc(100% - 0px)";
-		}
+		mainContainer.style.bottom = "calc(50% - 20px)";
 	}
 
 	if (updateCurrentState)
@@ -266,19 +241,10 @@ let outer = document.getElementById('mainContainer'),
 
 window.addEventListener("resize", resize);
 
-// Modified resize function to handle different sides
 resize();
 function resize() {
 	const scale = window.innerWidth / maxWidth;
-	
-	// Different transformation based on appearance side
-	if (appearSide === "top" || appearSide === "bottom") {
-		outer.style.transform = `translate(-50%, 0) scale(${scale})`;
-	} else if (appearSide === "left") {
-		outer.style.transform = `translate(0, -50%) scale(${scale})`;
-	} else if (appearSide === "right") {
-		outer.style.transform = `translate(0, -50%) scale(${scale})`;
-	}
+	outer.style.transform = 'translate(-50%, 50%) scale(' + scale + ')';
 }
 
 
@@ -291,25 +257,6 @@ function resize() {
 if (hideAlbumArt) {
 	document.getElementById("albumArtBox").style.display = "none";
 	document.getElementById("songInfoBox").style.width = "calc(100% - 20px)";
-}
-
-//////////////////////////////////
-// SET INITIAL POSITION STYLES  //
-//////////////////////////////////
-
-const mainContainer = document.getElementById("mainContainer");
-
-// Set initial position based on the appearSide parameter
-if (appearSide === "top" || appearSide === "bottom") {
-	mainContainer.style.left = "50%";
-	mainContainer.style.top = appearSide === "top" ? "30px" : "auto";
-	mainContainer.style.bottom = appearSide === "bottom" ? "30px" : "auto";
-	mainContainer.style.transform = `translate(-50%, 0)`;
-} else if (appearSide === "left" || appearSide === "right") {
-	mainContainer.style.left = appearSide === "left" ? "0px" : "calc(100% - 0px)";
-	mainContainer.style.top = "50%";
-	mainContainer.style.bottom = "auto";
-	mainContainer.style.transform = `translate(0, -50%)`;
 }
 
 
