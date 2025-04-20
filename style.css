@@ -23,19 +23,30 @@ body {
 }
 
 #mainContainer {
+	/* typography & layout */
 	font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
 	display: flex;
+	
+	/* positioning */
 	position: absolute;
+	top: 50%;
+	left: calc(-100% - 20px);           /* off-screen to the left */
+	transform: translate(-50%, -50%);   /* vertically + horizontally center when at left:50% */
+	
+	/* sizing */
 	height: var(--album-art-size);
-	margin: 20px;
-	filter: drop-shadow(15px 15px 7px rgba(0, 0, 0, 1));
 	width: 100%;
 	max-width: 500px;
-	bottom: calc(50% - 20px);
-	left: 50%;
-	opacity: 0;
-	transition: all 0.5s ease;
-}
+	margin: 20px;
+	
+	/* visual styling */
+	filter: drop-shadow(15px 15px 7px rgba(0, 0, 0, 1));
+	opacity: 0;                         /* hidden by default */
+	
+	/* animate only left & opacity */
+	transition: left 0.5s ease, opacity 0.5s ease;
+  }
+  
 
 #albumArtBox {
 	background: rgba(0, 0, 0, 0.5);

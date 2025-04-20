@@ -212,22 +212,19 @@ function ConvertSecondsToMinutesSoThatItLooksBetterOnTheOverlay(time) {
 }
 
 function SetVisibility(isVisible, updateCurrentState = true) {
-	widgetVisibility = isVisible;
-
-	const mainContainer = document.getElementById("mainContainer");
-
+	const main = document.getElementById("mainContainer");
+  
 	if (isVisible) {
-		mainContainer.style.opacity = 1;
-		mainContainer.style.bottom = "50%";
+	  main.style.opacity = 1;
+	  main.style.left    = "50%";              // slide in to center
+	} else {
+	  main.style.opacity = 0;
+	  main.style.left    = "calc(-100% - 20px)"; // slide out to left
 	}
-	else {
-		mainContainer.style.opacity = 0;
-		mainContainer.style.bottom = "calc(50% - 20px)";
-	}
-
-	if (updateCurrentState)
-		currentState = isVisible;
-}
+  
+	if (updateCurrentState) currentState = isVisible;
+  }
+  
 
 
 
