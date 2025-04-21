@@ -24,27 +24,20 @@ body {
 }
 
 #mainContainer {
-  /* layout */
   display: flex;
   position: absolute;
-
-  /* start off‑screen to the left, vertically centered */
   top: 50%;
-  left: calc(-100% - 20px);
+  left: 50%;
   transform: translate(-50%, -50%);
-
-  /* sizing */
   height: var(--album-art-size);
   width: 100%;
   max-width: 500px;
   margin: 20px;
-
-  /* styling */
   filter: drop-shadow(15px 15px 7px rgba(0, 0, 0, 1));
-  opacity: 0; /* hidden by default */
+  opacity: 0;
 
-  /* animate only horizontal position & opacity */
-  transition: left 0.5s ease, opacity 0.5s ease;
+  /* now animate any change to left/top & opacity */
+  transition: left 0.5s ease, top 0.5s ease, opacity 0.5s ease;
 }
 
 #albumArtBox {

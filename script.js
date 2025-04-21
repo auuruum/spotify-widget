@@ -13,6 +13,23 @@ let access_token = "";
 const visibilityDuration = urlParams.get("duration") || 0;
 const hideAlbumArt = urlParams.has("hideAlbumArt");
 
+// new params: which side to slide IN from, and which to slide OUT to
+const slideInSide = urlParams.get("slide_in") || "bottom";
+const slideOutSide = urlParams.get("slide_out") || slideInSide;
+
+const offscreen = {
+  left: "calc(-100% - 20px)",
+  right: "calc(100% + 20px)",
+  top: "calc(-100% - 20px)",
+  bottom: "calc(100% + 20px)",
+};
+
+// when visible, always center on both axes
+const onscreen = {
+  left: "50%",
+  top: "50%",
+};
+
 let currentState = false;
 let currentSongUri = "";
 
@@ -202,14 +219,26 @@ function ConvertSecondsToMinutesSoThatItLooksBetterOnTheOverlay(time) {
 }
 
 function SetVisibility(isVisible, updateCurrentState = true) {
-  const main = document.getElementById("mainContainer");
+  const el = document.getElementById("mainContainer");
 
   if (isVisible) {
-    main.style.opacity = "1";
-    main.style.left = "50%"; // slide into center
+    // fade in, slide FROM slideInSide → center
+    el.style.opacity = "1";
+
+    if (slideInSide === "left" || slideInSide === "right") {
+      el.style.left = onscreen.left;
+    } else {
+      el.style.top = onscreen.top;
+    }
   } else {
-    main.style.opacity = "0";
-    main.style.left = "calc(-100% - 20px)"; // slide back out to left
+    // fade out, slide TO slideOutSide
+    el.style.opacity = "0";
+
+    if (slideOutSide === "left" || slideOutSide === "right") {
+      el.style.left = offscreen[slideOutSide];
+    } else {
+      el.style.top = offscreen[slideOutSide];
+    }
   }
 
   if (updateCurrentState) currentState = isVisible;
